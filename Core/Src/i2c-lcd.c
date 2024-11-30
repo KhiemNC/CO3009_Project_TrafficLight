@@ -2,13 +2,14 @@
 /** Put this in the src folder **/
 
 #include "i2c-lcd.h"
-extern I2C_HandleTypeDef hi2c1;  // change your handler here accordingly
 
-#define SLAVE_ADDRESS_LCD 0x42 // change this according to ur setup
+//extern I2C_HandleTypeDef hi2c1;  // change your handler here accordingly ***** EXTERN IN main.h, DO NOT EXTERN HERE
+
+//#define SLAVE_ADDRESS_LCD 0x42 // change this according to ur setup ***** DEFINE IN i2c-lcd.h, DO NOT DO IT HERE
 
 void lcd_send_cmd (char cmd)
 {
-  char data_u, data_l;
+    char data_u, data_l;
 	uint8_t data_t[4];
 	data_u = (cmd&0xf0);
 	data_l = ((cmd<<4)&0xf0);
@@ -16,7 +17,7 @@ void lcd_send_cmd (char cmd)
 	data_t[1] = data_u|0x08;  //en=0, rs=0
 	data_t[2] = data_l|0x0C;  //en=1, rs=0
 	data_t[3] = data_l|0x08;  //en=0, rs=0
-	HAL_I2C_Master_Transmit (&hi2c1, SLAVE_ADDRESS_LCD,(uint8_t *) data_t, 4, 100);
+	HAL_I2C_Master_Transmit (&hi2c1, SLAVE_ADDRESS_LCD,(uint8_t *) data_t, 4, 1);
 }
 
 void lcd_send_data (char data)
@@ -29,7 +30,7 @@ void lcd_send_data (char data)
 	data_t[1] = data_u|0x09;  //en=0, rs=0
 	data_t[2] = data_l|0x0D;  //en=1, rs=0
 	data_t[3] = data_l|0x09;  //en=0, rs=0
-	HAL_I2C_Master_Transmit (&hi2c1, SLAVE_ADDRESS_LCD,(uint8_t *) data_t, 4, 100);
+	HAL_I2C_Master_Transmit (&hi2c1, SLAVE_ADDRESS_LCD,(uint8_t *) data_t, 4, 1);
 }
 
 void lcd_clear (void)
@@ -88,9 +89,10 @@ void lcd_send_string (char *str)
 	while (*str) lcd_send_data (*str++);
 }
 //////////////KHAI BAO BUFFER VOI TASK DISPLAY LCD/////////////////////////////////////////////////////////////////
-#define LCD_BUFFER_SIZE 16
-char LCD_Buffer_Row0[LCD_BUFFER_SIZE]; //khai bao o globla/common duoc ne
-char LCD_Buffer_Row1[LCD_BUFFER_SIZE];
+//#define LCD_BUFFER_SIZE 16 ***** DEFINE IN i2c-lcd.h, DO NOT DO IT HERE
+char LCD_Buffer_Row0[LCD_BUFFER_SIZE] = {0x31}; //khai bao o globla/common duoc ne
+char LCD_Buffer_Row1[LCD_BUFFER_SIZE] = {0x39};
+
 void LCD_Display(){ //
 //co the xai spintf de xu ly gan cho buffer, ham nay giong gan string str = "string" cua C++
 //	sprintf( (char*)LCD_Buffer_Row0, "RED %d%d YELLOW %d%d", CD1/10, CD1%10, CD2/10, CD2%10);
@@ -100,3 +102,21 @@ void LCD_Display(){ //
 	lcd_put_cur (1 , 0);
 	lcd_send_string((char*)LCD_Buffer_Row1);
  }
+
+void update_LCD_buffer(uint8_t row, char *str)
+{
+	if (row == 0)
+	{
+		for (int i = 0; i < LCD_BUFFER_SIZE; i++)
+		{
+			LCD_Buffer_Row0[i] = str[i];
+		}
+	}
+	else
+	{
+		for (int i = 0; i < LCD_BUFFER_SIZE; i++)
+		{
+			LCD_Buffer_Row1[i] = str[i];
+		}
+	}
+}

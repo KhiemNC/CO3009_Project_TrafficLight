@@ -312,7 +312,7 @@ void init_auto_red_grn()
 	counter_way0 = red_time;
 	counter_way1 = grn_time;
 	update_led_7seg_buffer();
-
+	update_LCD_buffer(0, "AUTOMATION MODE");
 }
 void auto_red_grn()
 {
