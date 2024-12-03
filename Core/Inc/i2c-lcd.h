@@ -1,6 +1,6 @@
 #include "main.h"
 
-#define SLAVE_ADDRESS_LCD 0x27 // 0x42
+#define SLAVE_ADDRESS_LCD 0x42
 #define LCD_BUFFER_SIZE 16
 
 extern char LCD_Buffer_Row0[LCD_BUFFER_SIZE];
