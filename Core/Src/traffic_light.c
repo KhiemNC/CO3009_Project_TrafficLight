@@ -6,6 +6,8 @@
  */
 
 #include "traffic_light.h"
+#include "i2c-lcd.h"
+#include "stdio.h"
 
 enum TrafficLightState TRAFFIC_LIGHT_STATE = INIT;
 
@@ -306,13 +308,11 @@ void init_auto_red_grn()
 	resetButton(&button2);
 
 	// OTHER PRECONDITIONS
-	set_on_4digits();
-	enable7SEG = 1;
 	setTimer(TIMER_1SEC, TIME_1SEC);
 	counter_way0 = red_time;
 	counter_way1 = grn_time;
-	update_led_7seg_buffer();
-	update_LCD_buffer(0, "AUTOMATION MODE");
+	sprintf((char*)LCD_Buffer_Row0, "AUTOMATION MODE");
+	sprintf((char*)LCD_Buffer_Row1, "W0: %d%d - W1: %d%d", counter_way0/10%10, counter_way0%10, counter_way1/10%10, counter_way1%10);
 }
 void auto_red_grn()
 {
@@ -325,7 +325,7 @@ void auto_red_grn()
 	{
 		--counter_way0;
 		--counter_way1;
-		update_led_7seg_buffer();
+		sprintf((char*)LCD_Buffer_Row1, "W0: %d%d - W1: %d%d", counter_way0/10%10, counter_way0%10, counter_way1/10%10, counter_way1%10);
 		setTimer(TIMER_1SEC, TIME_1SEC);
 	}
 }
@@ -338,12 +338,12 @@ void init_auto_red_yel()
 	resetButton(&button1);
 
 	// OTHER PRECONDITIONS
-	set_on_4digits();
-	enable7SEG = 1;
 	setTimer(TIMER_1SEC, TIME_1SEC);
 	counter_way0 = yel_time;
 	counter_way1 = yel_time;
-	update_led_7seg_buffer();
+//	update_led_7seg_buffer();
+	sprintf((char*)LCD_Buffer_Row0, "AUTOMATION MODE");
+	sprintf((char*)LCD_Buffer_Row1, "W0: %d%d - W1: %d%d", counter_way0/10%10, counter_way0%10, counter_way1/10%10, counter_way1%10);
 }
 void auto_red_yel()
 {
@@ -356,7 +356,7 @@ void auto_red_yel()
 	{
 		--counter_way0;
 		--counter_way1;
-		update_led_7seg_buffer();
+		sprintf((char*)LCD_Buffer_Row1, "W0: %d%d - W1: %d%d", counter_way0/10%10, counter_way0%10, counter_way1/10%10, counter_way1%10);
 		setTimer(TIMER_1SEC, TIME_1SEC);
 	}
 }
@@ -370,12 +370,11 @@ void init_auto_grn_red()
 	resetButton(&button2);
 
 	// OTHER PRECONDITIONS
-	set_on_4digits();
-	enable7SEG = 1;
 	setTimer(TIMER_1SEC, TIME_1SEC);
 	counter_way0 = grn_time;
 	counter_way1 = red_time;
-	update_led_7seg_buffer();
+	sprintf((char*)LCD_Buffer_Row0, "AUTOMATION MODE");
+	sprintf((char*)LCD_Buffer_Row1, "W0: %d%d - W1: %d%d", counter_way0/10%10, counter_way0%10, counter_way1/10%10, counter_way1%10);
 }
 void auto_grn_red()
 {
@@ -388,7 +387,7 @@ void auto_grn_red()
 	{
 		--counter_way0;
 		--counter_way1;
-		update_led_7seg_buffer();
+		sprintf((char*)LCD_Buffer_Row1, "W0: %d%d - W1: %d%d", counter_way0/10%10, counter_way0%10, counter_way1/10%10, counter_way1%10);
 		setTimer(TIMER_1SEC, TIME_1SEC);
 	}
 }
@@ -401,12 +400,11 @@ void init_auto_yel_red()
 	resetButton(&button1);
 
 	// OTHER PRECONDITIONS
-	set_on_4digits();
-	enable7SEG = 1;
 	setTimer(TIMER_1SEC, TIME_1SEC);
 	counter_way0 = yel_time;
 	counter_way1 = yel_time;
-	update_led_7seg_buffer();
+	sprintf((char*)LCD_Buffer_Row0, "AUTOMATION MODE");
+	sprintf((char*)LCD_Buffer_Row1, "W0: %d%d - W1: %d%d", counter_way0/10%10, counter_way0%10, counter_way1/10%10, counter_way1%10);
 }
 void auto_yel_red()
 {
@@ -419,7 +417,7 @@ void auto_yel_red()
 	{
 		--counter_way0;
 		--counter_way1;
-		update_led_7seg_buffer();
+		sprintf((char*)LCD_Buffer_Row1, "W0: %d%d - W1: %d%d", counter_way0/10%10, counter_way0%10, counter_way1/10%10, counter_way1%10);
 		setTimer(TIMER_1SEC, TIME_1SEC);
 	}
 }
@@ -431,7 +429,9 @@ void init_man_red_grn()
 	resetButton(&button2);
 
 	// OTHER PRECONDITIONS
-	enable7SEG = 0;
+//	enable7SEG = 0;
+	sprintf((char*)LCD_Buffer_Row0, "MANUAL MODE    ");
+	sprintf((char*)LCD_Buffer_Row1, "W0:RED - W1:GRN");
 }
 void man_red_grn()
 {
@@ -447,7 +447,9 @@ void init_man_red_yel()
 	setTimer(TIMER_TRAFFIC_LIGHT, yel_time * 1000);
 
 	// OTHER PRECONDITIONS
-	enable7SEG = 0;
+//	enable7SEG = 0;
+	sprintf((char*)LCD_Buffer_Row0, "MANUAL MODE    ");
+	sprintf((char*)LCD_Buffer_Row1, "W0:RED - W1:YEL");
 }
 void man_red_yel()
 {
@@ -464,7 +466,9 @@ void init_man_grn_red()
 	resetButton(&button2);
 
 	// OTHER PRECONDITIONS
-	enable7SEG = 0;
+//	enable7SEG = 0;
+	sprintf((char*)LCD_Buffer_Row0, "MANUAL MODE    ");
+	sprintf((char*)LCD_Buffer_Row1, "W0:GRN - W1:RED");
 }
 void man_grn_red()
 {
@@ -480,7 +484,9 @@ void init_man_yel_red()
 	setTimer(TIMER_TRAFFIC_LIGHT, yel_time * 1000);
 
 	// OTHER PRECONDITIONS
-	enable7SEG = 0;
+//	enable7SEG = 0;
+	sprintf((char*)LCD_Buffer_Row0, "MANUAL MODE    ");
+	sprintf((char*)LCD_Buffer_Row1, "W0:YEL - W1:RED");
 }
 void man_yel_red()
 {
@@ -500,11 +506,8 @@ void init_red_time_config()
 	turn_red_on();
 	setTimer(TIMER_250MS, TIME_250MS);
 
-	set_on_4digits();
-	counter_way0 = red_temp_time;
-	counter_way1 = 9;
-	update_led_7seg_buffer();
-	enable7SEG = 1;
+	sprintf((char*)LCD_Buffer_Row0, "RED TIME CONFIG");
+	sprintf((char*)LCD_Buffer_Row1, "OLD:%d%d - NEW:%d%d", red_time/10%10, red_time%10, red_temp_time/10%10, red_temp_time%10);
 }
 void red_time_config()
 {
@@ -523,8 +526,7 @@ void red_time_config()
 			red_temp_time = MIN_COUNTER;
 		}
 
-		counter_way0 = red_temp_time;
-		update_led_7seg_buffer();
+		sprintf((char*)LCD_Buffer_Row1, "OLD:%d%d - NEW:%d%d", red_time/10%10, red_time%10, red_temp_time/10%10, red_temp_time%10);
 	}
 
 	if (isFlag(TIMER_250MS))
@@ -546,13 +548,8 @@ void init_red_time_config_change()
 	turn_red_on();
 	setTimer(TIMER_250MS, TIME_250MS);
 
-	set_on_4digits();
-	counter_way0 = red_temp_time;
-	counter_way1 = 10;
-	update_led_7seg_buffer();
-	enable7SEG = 1;
-
-	setTimer(TIMER_7SEG_STATUS, TIME_7SEG_STATUS);
+	sprintf((char*)LCD_Buffer_Row0, "RED TIME CONFIG");
+	sprintf((char*)LCD_Buffer_Row1, "OLD:%d%d - NEW:%d%d", red_time/10%10, red_time%10, red_temp_time/10%10, red_temp_time%10);
 }
 void red_time_config_change()
 {
@@ -580,8 +577,7 @@ void red_time_config_change()
 			}
 		}
 
-		counter_way0 = red_temp_time;
-		update_led_7seg_buffer();
+		sprintf((char*)LCD_Buffer_Row1, "OLD:%d%d - NEW:%d%d", red_time/10%10, red_time%10, red_temp_time/10%10, red_temp_time%10);
 	}
 
 	if (isFlag(TIMER_250MS))
@@ -589,21 +585,6 @@ void red_time_config_change()
 		toggleRed();
 
 		setTimer(TIMER_250MS, TIME_250MS);
-	}
-
-	if (isFlag(TIMER_7SEG_STATUS))
-	{
-		if (status_4digits[0] == LED_ON)
-		{
-			status_4digits[0] = LED_OFF;
-			status_4digits[1] = LED_OFF;
-		}
-		else
-		{
-			status_4digits[0] = LED_ON;
-			status_4digits[1] = LED_ON;
-		}
-		setTimer(TIMER_7SEG_STATUS, TIME_7SEG_STATUS);
 	}
 }
 
@@ -617,11 +598,8 @@ void init_yel_time_config()
 	turn_yel_on();
 	setTimer(TIMER_250MS, TIME_250MS);
 
-	set_on_4digits();
-	counter_way0 = yel_temp_time;
-	counter_way1 = 11;
-	update_led_7seg_buffer();
-	enable7SEG = 1;
+	sprintf((char*)LCD_Buffer_Row0, "YEL TIME CONFIG");
+	sprintf((char*)LCD_Buffer_Row1, "OLD:%d%d - NEW:%d%d", yel_time/10%10, yel_time%10, yel_temp_time/10%10, yel_temp_time%10);
 }
 void yel_time_config()
 {
@@ -640,8 +618,7 @@ void yel_time_config()
 			yel_temp_time = MIN_COUNTER;
 		}
 
-		counter_way0 = yel_temp_time;
-		update_led_7seg_buffer();
+		sprintf((char*)LCD_Buffer_Row1, "OLD:%d%d - NEW:%d%d", yel_time/10%10, yel_time%10, yel_temp_time/10%10, yel_temp_time%10);
 	}
 
 	if (isFlag(TIMER_250MS))
@@ -662,13 +639,8 @@ void init_yel_time_config_change()
 	turn_yel_on();
 	setTimer(TIMER_250MS, TIME_250MS);
 
-	set_on_4digits();
-	counter_way0 = yel_temp_time;
-	counter_way1 = 12;
-	update_led_7seg_buffer();
-	enable7SEG = 1;
-
-	setTimer(TIMER_7SEG_STATUS, TIME_7SEG_STATUS);
+	sprintf((char*)LCD_Buffer_Row0, "YEL TIME CONFIG");
+	sprintf((char*)LCD_Buffer_Row1, "OLD:%d%d - NEW:%d%d", yel_time/10%10, yel_time%10, yel_temp_time/10%10, yel_temp_time%10);
 }
 void yel_time_config_change()
 {
@@ -696,8 +668,7 @@ void yel_time_config_change()
 			}
 		}
 
-		counter_way0 = yel_temp_time;
-		update_led_7seg_buffer();
+		sprintf((char*)LCD_Buffer_Row1, "OLD:%d%d - NEW:%d%d", yel_time/10%10, yel_time%10, yel_temp_time/10%10, yel_temp_time%10);
 	}
 
 	if (isFlag(TIMER_250MS))
@@ -705,21 +676,6 @@ void yel_time_config_change()
 		toggleYel();
 
 		setTimer(TIMER_250MS, TIME_250MS);
-	}
-
-	if (isFlag(TIMER_7SEG_STATUS))
-	{
-		if (status_4digits[0] == LED_ON)
-		{
-			status_4digits[0] = LED_OFF;
-			status_4digits[1] = LED_OFF;
-		}
-		else
-		{
-			status_4digits[0] = LED_ON;
-			status_4digits[1] = LED_ON;
-		}
-		setTimer(TIMER_7SEG_STATUS, TIME_7SEG_STATUS);
 	}
 }
 
@@ -733,11 +689,8 @@ void init_grn_time_config()
 	turn_grn_on();
 	setTimer(TIMER_250MS, TIME_250MS);
 
-	set_on_4digits();
-	counter_way0 =grn_temp_time;
-	counter_way1 = 13;
-	update_led_7seg_buffer();
-	enable7SEG = 1;
+	sprintf((char*)LCD_Buffer_Row0, "GRN TIME CONFIG");
+	sprintf((char*)LCD_Buffer_Row1, "OLD:%d%d - NEW:%d%d", grn_time/10%10, grn_time%10, grn_temp_time/10%10, grn_temp_time%10);
 }
 void grn_time_config()
 {
@@ -756,8 +709,8 @@ void grn_time_config()
 			grn_temp_time = MIN_COUNTER;
 		}
 
-		counter_way0 = grn_temp_time;
-		update_led_7seg_buffer();
+		sprintf((char*)LCD_Buffer_Row1, "OLD:%d%d - NEW:%d%d", grn_time/10%10, grn_time%10, grn_temp_time/10%10, grn_temp_time%10);
+
 	}
 
 	if (isFlag(TIMER_250MS))
@@ -778,13 +731,8 @@ void init_grn_time_config_change()
 	turn_grn_on();
 	setTimer(TIMER_250MS, TIME_250MS);
 
-	set_on_4digits();
-	counter_way0 = grn_temp_time;
-	counter_way1 = 14;
-	update_led_7seg_buffer();
-	enable7SEG = 1;
-
-	setTimer(TIMER_7SEG_STATUS, TIME_7SEG_STATUS);
+	sprintf((char*)LCD_Buffer_Row0, "GRN TIME CONFIG");
+	sprintf((char*)LCD_Buffer_Row1, "OLD:%d%d - NEW:%d%d", grn_time/10%10, grn_time%10, grn_temp_time/10%10, grn_temp_time%10);
 }
 void grn_time_config_change()
 {
@@ -812,8 +760,7 @@ void grn_time_config_change()
 			}
 		}
 
-		counter_way0 = grn_temp_time;
-		update_led_7seg_buffer();
+		sprintf((char*)LCD_Buffer_Row1, "OLD:%d%d - NEW:%d%d", grn_time/10%10, grn_time%10, grn_temp_time/10%10, grn_temp_time%10);
 	}
 
 	if (isFlag(TIMER_250MS))
@@ -821,21 +768,6 @@ void grn_time_config_change()
 		toggleGrn();
 
 		setTimer(TIMER_250MS, TIME_250MS);
-	}
-
-	if (isFlag(TIMER_7SEG_STATUS))
-	{
-		if (status_4digits[0] == LED_ON)
-		{
-			status_4digits[0] = LED_OFF;
-			status_4digits[1] = LED_OFF;
-		}
-		else
-		{
-			status_4digits[0] = LED_ON;
-			status_4digits[1] = LED_ON;
-		}
-		setTimer(TIMER_7SEG_STATUS, TIME_7SEG_STATUS);
 	}
 }
 
@@ -846,7 +778,8 @@ void init_yel_blinky()
 
 	// OTHER PRECONDITIONS
 	turn_yel_on();
-	enable7SEG = 0;
+	sprintf((char*)LCD_Buffer_Row0, "   SLOW  DOWN  ");
+	sprintf((char*)LCD_Buffer_Row1, "   SLOW  DOWN  ");
 	setTimer(TIMER_500MS, TIME_500MS);
 }
 void yel_blinky()

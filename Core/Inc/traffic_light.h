@@ -12,7 +12,6 @@
 #include "software_timer.h"
 #include "button.h"
 #include "common.h"
-#include "ic_74HC595.h"
 #include "led_traffic.h"
 #include "i2c-lcd.h"
 
