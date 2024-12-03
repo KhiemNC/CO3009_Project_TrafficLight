@@ -10,7 +10,7 @@
 
 #include "main.h"
 
-#define TICK 1 // ms
+#define TICK 10 // ms
 
 struct TimerStruct
 {
