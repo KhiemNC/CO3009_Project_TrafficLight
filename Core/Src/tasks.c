@@ -19,15 +19,3 @@ void t_blinkyLED()
 {
 	HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
 }
-
-void t_displayLed7Seg()
-{
-	if (enable7SEG == 1)
-	{
-		display_4digits();
-	}
-	else
-	{
-		unable_4digits();
-	}
-}
